@@ -1,0 +1,56 @@
+<button type="button" (click)="setHabilitar()" class="btn btn-primary my-3">
+  {{ habilitar == true ? "Ocultar" : "Mostrar" }}
+</button>
+<div class="card">
+  <div class="card-header">Listado de Cursos</div>
+  <ul class="list-group" *ngIf="habilitar == true">
+    <li
+      class="list-group-item"
+      *ngFor="let curso of listaCurso; let indice = index"
+    >
+      Curso: {{ curso }}
+      <button (click)="borrarCurso(indice)">Borrar curso</button>
+    </li>
+  </ul>
+
+  <div class="card text-white bg-primary">
+    <div class="card-body">
+      <h4 class="card-title">{{ autorName }}</h4>
+      <p class="card-text" [ngStyle]="{ 'background-color': 'green' }">
+        {{ autorApellido }}
+      </p>
+    </div>
+  </div>
+  <div>
+    <ul>
+      <li *ngFor="let vehiculo of vehiculos">{{ vehiculo.nombre }}</li>
+    </ul>
+  </div>
+  <div>
+    <p>Añadir texto prueba</p>
+    <p>
+      <input
+        type="text"
+        [(ngModel)]="textForm"
+        (keyup)="mostrarTextoPresionado()"
+      />
+      <button (click)="getTexto()">Mostrar Cursos</button>
+      <button (click)="addTexto()">Añadir Cursos</button>
+    </p>
+    <strong>{{ textForm }}</strong>
+  </div>
+
+  <app-search-producto (search)="handleSearch($event)" spellcheck="false" autocomplete="none"></app-search-producto>
+
+  <ul class="alert alert-danger" *ngIf="errores.length > 0">
+    <li *ngFor="let err of errores">{{ err }}</li>
+  </ul>
+
+  <div *ngIf="producto != null && producto.length> 0">
+    <ul *ngFor="let pr of producto">
+      <li>{{pr.id}}</li>  
+      <li>{{pr.nombre}}</li>
+      <li>{{pr.precio}}</li>
+    </ul>
+  </div>
+</div>

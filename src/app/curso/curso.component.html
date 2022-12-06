@@ -1,0 +1,13 @@
+<div class="card text-black">
+
+  <div class="card-body">
+    <h4 class="card-title" *ngIf="nombre">Curso seleccionado!</h4>
+
+    <p class="card-text" *ngIf="nombre">El curso seleccionado es: {{nombre}}</p>
+    <p class="card-text" *ngIf="id || id>0">Estudiante con identificación: {{id}}</p>
+  </div>
+  <div>
+    <button (click)="redirigir()">Ir al inicio de la aplicación</button>
+  </div>
+</div>
+

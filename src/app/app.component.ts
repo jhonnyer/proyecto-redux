@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'proyecto1-app';
+  title = 'Bienvenido a Angular';
+
+  IsAuthenticated=false;
+
+  curso : string = 'Curso Básico de Angular'; //Definir variables de este tipo lo hace mas robusto
+  profesor: string = "Jhonnyer Fernando Galindez"
 }

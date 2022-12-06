@@ -1,0 +1,1 @@
+export var listaCurso=['Typescript', 'JavaScript', 'Java SE', 'C#', 'PHP'];

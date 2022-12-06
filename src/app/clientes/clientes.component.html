@@ -1,0 +1,134 @@
+<div class="card text-bg-light mb-3">
+  <div class="container">
+    <div class="row">
+      <div class="rounded col-9 m-1 card-header"><strong>Listado de clientes</strong></div>
+      <div class="col-2 my-2 text-left">
+        <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']">Añadir un nuevo cliente</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div *ngIf="clientes.length == 0" class="alert alert-info">
+      No hay registros en la base de datos!
+    </div>
+
+    <table
+      matSort
+      (matSortChange)="sortData($event)"
+      mat-table
+      [dataSource]="dataSource"
+      *ngIf="clientes.length > 0"
+    >
+      <!-- id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>No.</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+
+      <!-- nombre Column -->
+      <ng-container matColumnDef="nombre">
+        <th mat-sort-header mat-header-cell *matHeaderCellDef>nombre</th>
+        <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+      </ng-container>
+
+      <!-- apellido Column -->
+      <ng-container matColumnDef="apellido">
+        <th mat-header-cell *matHeaderCellDef>apellido</th>
+        <td mat-cell *matCellDef="let element">{{ element.apellido }}</td>
+      </ng-container>
+
+      <!-- email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>email</th>
+        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      </ng-container>
+
+      <!-- createAt Column -->
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef>fecha</th>
+        <td mat-cell *matCellDef="let element">{{ element.createAt }}</td>
+      </ng-container>
+
+      <!-- editar Column -->
+      <ng-container matColumnDef="editar">
+        <th mat-header-cell *matHeaderCellDef>editar</th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            type="button"
+            nombre="button"
+            [routerLink]="['/clientes/form', element.id]"
+            class="btn btn-primary"
+          >
+            Editar
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- eliminar Column -->
+      <ng-container matColumnDef="eliminar">
+        <th mat-header-cell *matHeaderCellDef>eliminar</th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            type="button"
+            nombre="eliminar"
+            (click)="delete(element)"
+            class="btn btn-danger btn-sm"
+          >
+            Eliminar
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+      aria-label="Select page of periodic elements"
+    >
+    </mat-paginator>
+  </div>
+</div>
+
+<!-- <div class="card text-bg-light mb-3">
+    <div class="card-header">Clientes</div>
+    <div class="card-body">
+      <h5 class="card-title">Listado de clientes</h5>
+
+      <div class="my-2 text-left">
+        <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']">Añadir un nuevo cliente</button>
+      </div>
+      
+      <div *ngIf="clientes.length==0" class="alert alert-info">
+        No hay registros en la base de datos!
+      </div>
+
+      <table class="table table-bordered table-striped" *ngIf="clientes.length>0">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Fecha</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cliente of clientes">
+                <td>{{ cliente.id }}</td>
+                <td>{{ cliente.nombre }}</td>
+                <td>{{ cliente.apellido | uppercase}}</td>
+                <td>{{ cliente.email }}</td>
+                <td>{{ cliente.createAt | date:"EEEE dd, MMMM yyyy"}}</td>
+                <td><button type="button" nombre="button" [routerLink]="['/clientes/form',cliente.id]" class="btn btn-primary">Editar</button></td>
+                <td><button type="button" nombre="eliminar" (click)='delete(cliente)' class="btn btn-danger btn-sm">Eliminar</button></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div> -->

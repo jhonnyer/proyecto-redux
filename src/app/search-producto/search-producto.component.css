@@ -1,0 +1,12 @@
+html,body{
+    position: absolute;
+    height: 100%;
+}
+
+body{
+    margin: 20px;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.mat-form-field{
+    width: 100%;
+}
