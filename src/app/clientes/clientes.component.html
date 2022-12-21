@@ -1,21 +1,38 @@
+<!-- <app-header></app-header>  -->
 <div class="card text-bg-light mb-3">
   <div class="container">
-    <div class="row">
-      <div class="rounded col-9 m-1 card-header"><strong>Listado de clientes</strong></div>
-      <div class="col-2 my-2 text-left">
-        <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/clientes/form']">Añadir un nuevo cliente</button>
-      </div>
-    </div>
+    <mat-toolbar>
+      <span>Listado de Clientes</span>
+      <div class="example-spacer"></div>
+      <button
+        mat-raised-button
+        color="primary"
+        [routerLink]="['/index/clientes/form']"
+      >
+        Añadir un nuevo cliente
+      </button>
+    </mat-toolbar>
   </div>
 
+  <!-- mat-elevation-z8 -->
   <div class="card-body">
     <div *ngIf="clientes.length == 0" class="alert alert-info">
       No hay registros en la base de datos!
     </div>
 
+    <mat-form-field>
+      <mat-label>Filter</mat-label>
+      <input
+        matInput
+        (keyup)="applyFilter($event)"
+        placeholder="Filter"
+        #input
+      />
+    </mat-form-field>
+
+    <!-- (matSortChange)="sortData($event)" -->
     <table
       matSort
-      (matSortChange)="sortData($event)"
       mat-table
       [dataSource]="dataSource"
       *ngIf="clientes.length > 0"
@@ -57,7 +74,7 @@
           <button
             type="button"
             nombre="button"
-            [routerLink]="['/clientes/form', element.id]"
+            [routerLink]="['/index/clientes/form', element.id]"
             class="btn btn-primary"
           >
             Editar
@@ -85,12 +102,15 @@
     </table>
 
     <mat-paginator
-      [pageSizeOptions]="[5, 10, 20]"
+      [pageSizeOptions]="[5, 10]"
       showFirstLastButtons
       aria-label="Select page of periodic elements"
     >
     </mat-paginator>
   </div>
+  <button class="btn btn-primary" role="button" [routerLink]="['/directivas']">
+    TEST
+  </button>
 </div>
 
 <!-- <div class="card text-bg-light mb-3">

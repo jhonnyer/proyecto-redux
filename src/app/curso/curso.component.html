@@ -9,5 +9,10 @@
   <div>
     <button (click)="redirigir()">Ir al inicio de la aplicación</button>
   </div>
+  <div>
+    <ul *ngFor="let item of clientes$ | async">
+      <li>{{ item.nombre }}</li>
+    </ul>
+  </div>
 </div>
 

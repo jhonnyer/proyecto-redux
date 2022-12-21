@@ -1,4 +1,6 @@
-import{ Component, DoCheck, OnInit } from '@angular/core'
+import{ Component, DoCheck, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Router } from '@angular/router';
+import { LoginComponent } from '../login/login.component'
 
 @Component({
     selector: 'app-header',
@@ -9,14 +11,24 @@ import{ Component, DoCheck, OnInit } from '@angular/core'
 export class HeaderComponent implements OnInit, DoCheck{
     public title: string = 'App Angular Spring'
 
+    @Input () Authenticated:boolean;
+    @Output () isAuthenticated = new EventEmitter();
 
-    constructor(){}
+    constructor(private router: Router){
+        this.Authenticated=false;
+    }
 
-    ngOnInit(): void {
+    ngOnInit() {
         console.log("OnInit")
     }
 
+    logout(){
+        sessionStorage.clear();
+        this.isAuthenticated.emit(this.Authenticated);
+        this.router.navigate(['/login']);
+      }
+
     ngDoCheck(): void {
-        console.log("DoCheck ejecutado")
+        // console.log("DoCheck ejecutado")
     }
 }

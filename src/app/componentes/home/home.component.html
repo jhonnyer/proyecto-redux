@@ -1,0 +1,69 @@
+<div class="container my-3">
+  <h1>Bienvenidos al sistema de Facturación</h1>
+</div>
+
+<div class="container">
+  <mat-toolbar>Registrar usuario</mat-toolbar>
+  <form [formGroup]="formRegistro" (ngSubmit)="registerUser()">
+    <mat-card style="margin: 20px">
+        <mat-grid-list cols="4" rowHeight="50px">
+          <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="1"
+            [style.background]="'lightblue'"
+          >
+            <mat-form-field class="ancho">
+              <mat-label>Usuario</mat-label>
+              <input matInput autocomplete="off" formControlName="username"/>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="3"
+            [rowspan]="5"
+            [style.background]="'lightblue'"
+            >img</mat-grid-tile
+          >
+          <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="1"
+            [style.background]="'lightblue'"
+            >Apellido</mat-grid-tile
+          >
+          <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="1"
+            [style.background]="'lightblue'"
+            >Email</mat-grid-tile
+          >
+          <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="1"
+            [style.background]="'lightblue'"
+          >
+            <mat-form-field>
+              <mat-label>Identidad</mat-label>
+              <mat-select formControlName="identidad">
+                <mat-option *ngFor="let op of opciones" [value]="op.value">
+                  {{ op.item }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="1"
+            [rowspan]="1"
+            [style.background]="'lightblue'"
+          >
+            <button mat-raised-button style="margin-right: 20px">Volver</button>
+            <button type="submit" mat-raised-button color="primary" [disabled]="formRegistro.invalid">Guardar</button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card>
+  </form>
+
+  <button (click)="enviar()">Redux</button>
+
+  <div class="ui-grap">
+    <b *ngIf="loading$ | async">Cargando...</b>
+  </div>
+</div>

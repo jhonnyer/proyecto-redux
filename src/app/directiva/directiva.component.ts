@@ -1,17 +1,18 @@
-import { Component, DoCheck, OnDestroy } from '@angular/core';
+import { Component, DoCheck, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { listaCurso } from './listCursos';
 import { Autor } from './autor';
 import { Vehiculo } from './Vehiculo';
 import { ClienteService } from '../clientes/cliente.service';
 import { Cliente } from '../clientes/cliente';
 import { Producto } from '../clientes/Producto';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-directiva',
   templateUrl: './directiva.component.html',
   styleUrls: ['./directiva.component.css']
 })
-export class DirectivaComponent implements DoCheck, OnDestroy{
+export class DirectivaComponent implements OnInit, DoCheck, OnDestroy{
 
   public listaCurso: string[];
   public autorName: string; 
@@ -20,11 +21,17 @@ export class DirectivaComponent implements DoCheck, OnDestroy{
   public habilitar: boolean;
   public textForm:string;
 
-  public producto:Producto[];
+  public producto!:Producto;
   public filtro_Valor:string="";
   public errores:string[];
 
+  // @Input () Authenticated:boolean=false;
+  // @Output () isAuthenticated = new EventEmitter();
 
+
+  httpHeaders: HttpHeaders = new HttpHeaders();
+  token = sessionStorage.getItem('token');
+  
   constructor(private clientService: ClienteService,){
     this.vehiculos=[
       new Vehiculo("Automovil","Mazda", "Negro", "45000000"),
@@ -35,8 +42,10 @@ export class DirectivaComponent implements DoCheck, OnDestroy{
     this.autorApellido=Autor.apellido;
     this.habilitar=true;
     this.textForm="";
-    this.producto=[];
     this.errores=[];
+    this.httpHeaders = this.httpHeaders.append('Authorization', 'Bearer ' + this.token);
+  }
+  ngOnInit(): void {
   }
 
   setHabilitar(): void{
@@ -71,7 +80,7 @@ export class DirectivaComponent implements DoCheck, OnDestroy{
   handleSearch(value:string){
     this.filtro_Valor=value;
     console.log(value);
-    this.clientService.getProducto(value).subscribe(
+    this.clientService.getProducto(value, this.httpHeaders).subscribe(
       producto => {
         this.producto=producto;
         console.log(producto);

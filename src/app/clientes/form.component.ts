@@ -15,26 +15,30 @@ export class FormComponent implements OnInit{
   public cliente: Cliente;
   public titulo:string;
   public errores:string[];
+  public httpHeaders:HttpHeaders=new HttpHeaders();
+  public token=sessionStorage.getItem('token');
 
   constructor(private clientService: ClienteService, private router: Router, private activateRoute: ActivatedRoute){
-    this.cliente=new Cliente(0, "", "", "","","");
+    this.cliente=new Cliente(0, "", "", "","",[],"");
     this.titulo="Crear Cliente";
     this.errores=[];
+    this.httpHeaders=this.httpHeaders.append('Authorization','Bearer '+this.token);
   }
 
   ngOnInit(){
-    let httpHeaders:HttpHeaders=new HttpHeaders();
-    const token=sessionStorage.getItem('token');
-    httpHeaders=httpHeaders.append('Authorization','Bearer '+token);
-    console.log("get Token",token);
-    this.cargarCliente();
+    
+    
+    
+    // console.log("get Token",token);
+    this.cargarCliente(this.httpHeaders);
   }
 
-  public cargarCliente(): void{
+  public cargarCliente(httpHeaders:HttpHeaders): void{
     this.activateRoute.params.subscribe(params=>{
       let id=params['id']
+      console.log("ID:"+id);
       if(id){
-        this.clientService.getCliente(id).subscribe((cliente) =>{
+        this.clientService.getCliente(id, httpHeaders).subscribe((cliente) =>{
            this.cliente=cliente;
            console.log("Cliente"+cliente);
         },
@@ -48,9 +52,9 @@ export class FormComponent implements OnInit{
   }
 
   public create():void{
-    this.clientService.create(this.cliente).subscribe(
+    this.clientService.create(this.cliente, this.httpHeaders).subscribe(
       cliente => {
-        this.router.navigate(['/clientes']),
+        this.router.navigate(['/index/clientes']),
         swal('Nuevo cliente', `El cliente ${cliente.nombre} ha sido creado con éxito`, 'success') 
       },
       err=>{
@@ -62,9 +66,9 @@ export class FormComponent implements OnInit{
   }
 
   public update() :void{
-    this.clientService.update(this.cliente).subscribe(
+    this.clientService.update(this.cliente, this.httpHeaders).subscribe(
       cliente => {
-      this.router.navigate(['/clientes']);
+      this.router.navigate(['/index/clientes']);
       swal("Cliente actualizado", `El cliente ${cliente.nombre} ha sido actualizado con éxito`, 'success');
     },
       err=>{

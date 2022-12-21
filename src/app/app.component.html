@@ -1,9 +1,20 @@
-<!-- <app-header *ngIf="IsAuthenticated"></app-header> -->
-<app-header></app-header>
-
-<!-- <div class="container my-3 pb-5"> -->
-<div class="container my-3">
-  <router-outlet></router-outlet>
+<div>
+  <div class="container my-3">
+    <app-login
+      *ngIf="!Authenticated"
+      [Authenticated]="Authenticated"
+      (isAuthenticated)="Authenticated = $event"
+    ></app-login>
+  </div>
 </div>
 
-<app-footer *ngIf="IsAuthenticated"></app-footer>
+<div *ngIf="Authenticated">
+  <app-header class="header"
+    [Authenticated]="Authenticated"
+    (isAuthenticated)="Authenticated = $event"
+  ></app-header>
+
+  <router-outlet></router-outlet>
+
+  <app-footer></app-footer>
+</div>

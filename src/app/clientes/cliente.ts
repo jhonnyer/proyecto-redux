@@ -5,5 +5,6 @@ export class Cliente {
         public apellido: string, 
         public createAt: string, 
         public email:string, 
+        public role:string[],
         public foto:string){}
 }

@@ -16,15 +16,21 @@ import { IResponse } from '../models/iresponse';
 export class ClienteService {
 
   private UrlEndpoint: string = 'http://localhost:8080/cliente';
-  private UrlProducto:string="http://localhost:8080/producto/getProducto";
-  private UrlLogin:string="localhost:8080/api/login";
+  private UrlProducto:string="http://localhost:8080/producto/";
+  private UrlLogin:string="http://localhost:8080/auth/login";
 
-  private httpHeaders= new HttpHeaders({'Content-Type':'application/json'});
-  constructor(private http: HttpClient, private router: Router) { }
+  private token = sessionStorage.getItem('token');
+  private httpHeaders= new HttpHeaders();
+  
+
+  constructor(private http: HttpClient, private router: Router) { 
+    this.httpHeaders.append('Content-Type','application/json');
+  }
 
 
-  getProducto(name:string):Observable<Producto[]>{
-    return this.http.get<Producto[]>(`${this.UrlProducto}/${name}`).pipe(
+  getProducto(name:string, httpHeaders:HttpHeaders):Observable<Producto>{
+    return this.http.get<Producto>(`${this.UrlProducto+"findByNombre"}/${name}`,{headers:httpHeaders})
+    .pipe(
       catchError(e=>{
         let error:string[]=[];
         error.push("Producto no se encuentra disponible");
@@ -44,10 +50,11 @@ export class ClienteService {
   getClientes(httpHeaders:HttpHeaders): Observable<Cliente[]>{
     return this.http.get<Cliente[]>(this.UrlEndpoint+"/listar",{headers:httpHeaders}).pipe(
       tap(response =>{
-        console.log('ClienteService: tap 1');
+        // console.log('ClienteService: tap 1');
+        // console.log("Response: "+response);
         let clientes=response as Cliente[];
         clientes.forEach(cliente=>{
-          console.log(cliente.nombre);
+          // console.log(cliente.nombre);
         })
       }),
       map(response=>{
@@ -62,17 +69,17 @@ export class ClienteService {
         });
       }),
       tap(response =>{
-        console.log('ClienteService: tap 2');
+        // console.log('ClienteService: tap 2');
         response.forEach(cliente=>{
-          console.log(cliente.nombre);
+          // console.log(cliente.nombre);
         })
       })
     );
   }
 
 
-  getCliente(id:string): Observable<Cliente>{
-    return this.http.get<Cliente>(`${this.UrlEndpoint+"/getCliente"}/${id}`).pipe(
+  getCliente(id:string, httpHeaders:HttpHeaders): Observable<Cliente>{
+    return this.http.get<Cliente>(`${this.UrlEndpoint+"/findOne"}/${id}`, {headers:httpHeaders}).pipe(
       catchError(e => {
         if(e.status==400){
           return throwError(e);
@@ -87,29 +94,25 @@ export class ClienteService {
   }
   
 
-  create(cliente: Cliente) : Observable<Cliente>{
-    return this.http.post(this.UrlEndpoint+"/save",cliente, {headers:this.httpHeaders}).pipe(
+  getLogin(usuarioLogin: ILogin) : Observable<any>{
+    const errorlist:string[]=[];
+    return this.http.post<IResponse>(this.UrlLogin, usuarioLogin, {headers:this.httpHeaders}).pipe(
+      catchError(e =>{
+        errorlist.push(e);
+        swal("error", "Usuario o contraseña invalida");
+        return errorlist;
+      })
+    );
+  }
+
+  create(cliente: Cliente, httpHeaders:HttpHeaders) : Observable<Cliente>{
+    return this.http.post(this.UrlEndpoint+"/save",cliente, {headers:httpHeaders}).pipe(
       map( ( response:any ) => response.cliente as Cliente),
       catchError(e =>{
         if(e.status==400){
           return throwError(e);
         }
 
-        console.log(e.error.mensaje);
-        // swal('Error al crear el cliente', e.error.mensaje, 'error');
-        swal(e.error.mensaje, e.error.error, 'error');
-        return throwError(e);
-      })
-    );
-  }
-  
-  getLogin(usuarioLogin: ILogin) : Observable<any>{
-    return this.http.post(this.UrlLogin, usuarioLogin, {headers:this.httpHeaders}).pipe(
-      map( ( response:any ) => response as IResponse),
-      catchError(e =>{
-        if(e.status==400){
-          return throwError(e);
-        }
         console.log(e.error.mensaje);
         // swal('Error al crear el cliente', e.error.mensaje, 'error');
         swal(e.error.mensaje, e.error.error, 'error');
@@ -119,20 +122,36 @@ export class ClienteService {
   }
      
 
-  update(cliente: Cliente):Observable<Cliente>{
-    return this.http.put<any>(`${this.UrlEndpoint+"/save"}/${cliente.id}`, cliente, {headers:this.httpHeaders}).pipe(
+  update(cliente: Cliente, httpHeaders:HttpHeaders) : Observable<Cliente>{
+    return this.http.post(this.UrlEndpoint+"/save",cliente, {headers:httpHeaders}).pipe(
       map( ( response:any ) => response.cliente as Cliente),
       catchError(e =>{
         if(e.status==400){
           return throwError(e);
         }
+
         console.log(e.error.mensaje);
-        // swal('Error al editar el cliente', e.error, 'error');
+        // swal('Error al crear el cliente', e.error.mensaje, 'error');
         swal(e.error.mensaje, e.error.error, 'error');
         return throwError(e);
       })
-    );;
+    );
   }
+
+  // update(cliente: Cliente, httpHeaders:HttpHeaders):Observable<Cliente>{
+  //   return this.http.post<any>(`${this.UrlEndpoint+"/save"}/${cliente.id}`, cliente, {headers:httpHeaders}).pipe(
+  //     map( ( response:any ) => response.cliente as Cliente),
+  //     catchError(e =>{
+  //       if(e.status==400){
+  //         return throwError(e);
+  //       }
+  //       console.log(e.error.mensaje);
+  //       // swal('Error al editar el cliente', e.error, 'error');
+  //       swal(e.error.mensaje, e.error.error, 'error');
+  //       return throwError(e);
+  //     })
+  //   );;
+  // }
 
   // create(cliente: Cliente) : Observable<any>{
   //   return this.http.post<any>(this.UrlEndpoint+"/save",cliente, {headers:this.httpHeaders}).pipe(
@@ -157,8 +176,8 @@ export class ClienteService {
   // }
   
 
-  delete(id:number): Observable<Cliente>{
-    return this.http.delete<Cliente>(`${this.UrlEndpoint+"/delete"}/${id}`,{headers:this.httpHeaders})
+  delete(id:number, httpHeaders:HttpHeaders): Observable<Cliente>{
+    return this.http.delete<Cliente>(`${this.UrlEndpoint+"/delete"}/${id}`,{headers:httpHeaders})
   }
 
 
