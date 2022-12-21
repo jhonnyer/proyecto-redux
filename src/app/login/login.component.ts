@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit, OnDestroy{
           this.Authenticated=true;
           console.log(this.Authenticated);
           this.isAuthenticated.emit(this.Authenticated);
-          this.router.navigate(['/home']);
+          this.router.navigate(['/dashboard/static/home']);
         }
       }
     )

@@ -106,7 +106,7 @@ registerLocaleData(localeES, 'es');
     //STORE REDUX
     StoreModule.forRoot(ROOT_REDUCERS),  //Le pasamos el estado del reducer implementado
     StoreDevtoolsModule.instrument({maxAge:25}),
-    EffectsModule.forRoot([ClienteEffects])
+    EffectsModule.forRoot(ClienteEffects)
   ],
   providers: [
     ClienteService, 

@@ -2,10 +2,22 @@ import { Cliente } from "src/app/clientes/cliente";
 
 export interface ItemsState {
     loading:boolean,
-    clientes:ReadonlyArray<Cliente>;
+    clientes:Cliente[];
 }
 
 export interface ClienteState {
     loading:boolean,
-    cliente:Readonly<Cliente>;
+    cliente:Cliente;
+}
+
+
+export class ClienteReduce{
+    constructor(
+        public loading:boolean,
+        public cliente:Cliente,
+        public type:string,
+    ){
+        
+    }
+    
 }

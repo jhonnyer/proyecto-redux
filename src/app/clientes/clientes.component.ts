@@ -87,7 +87,8 @@ export class ClientesComponent implements OnInit, AfterViewInit, OnDestroy {
       reverseButtons: true,
     }).then((result) => {
       if (result.value) {
-        this.clienteService.delete(cliente.id, this.httpHeaders).subscribe((response) => {
+        let id= cliente.id!=null ? cliente.id  : 0; 
+        this.clienteService.delete(id, this.httpHeaders).subscribe((response) => {
           this.clientes = this.clientes.filter((cli) => cli !== cliente); //quitar del listado clientes, el objeto que se elimino para que se actualice de forma automatica.
           this.dataSource.data = this.clientes;
           swal(
@@ -121,9 +122,9 @@ export class ClientesComponent implements OnInit, AfterViewInit, OnDestroy {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'id':
-          return this.compare(a.id, b.id, isAsc);
+          return this.compare(a.id!=null ? a.id : 0, b.id != null ? b.id : 0, isAsc);
         case 'nombre':
-          return this.compare(a.nombre, b.nombre, isAsc);
+          return this.compare(a.nombre !=null ? a.nombre : "", b.nombre !=null ? b.nombre : "", isAsc);
         default:
           return 0;
       }

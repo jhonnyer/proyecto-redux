@@ -11,6 +11,16 @@ import { ClienteService } from 'src/app/clientes/cliente.service';
 export class ClienteEffects {
   httpHeaders: HttpHeaders = new HttpHeaders();
   token = sessionStorage.getItem('token');
+  constructor(
+    private actions$: Actions,
+    private clienteService: ClienteService,
+    private route: Router
+  ) {
+    this.httpHeaders = this.httpHeaders.append(
+      'Authorization',
+      'Bearer ' + this.token
+    );
+  }
 
   cliente$:Observable<Cliente>= new Observable();
 
@@ -29,31 +39,22 @@ export class ClienteEffects {
     )
   );
 
-//   createCliente$ = createEffect(() =>
-//     this.actions$.pipe(
-//       ofType('[Cliente create] Add Cliente'), //Accion definida en el user.actions.ts
-//       mergeMap(() =>
-//         this.clienteService.update(new Cliente(71, "Jhonnyer Efects", "Daza", "", "jhon@gmail.com",[],"") , this.httpHeaders)
-//         .pipe(
-//           map((clientes) => ({
-//             type: '[Cliente List] Load success',
-//             clientes,
-//           })), //Clientes hace referencia a el payload
-//           catchError(() => EMPTY)
-//         )
-//       )
-//     )
-//   );
+  createCliente$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType('[Cliente create] Add Cliente'), //Accion definida en el user.actions.ts
+      mergeMap(cliente =>
+        this.clienteService.update(cliente, this.httpHeaders)
+        .pipe(
+          map((clientes) => ({
+            type: '[Cliente List] Load Cliente',
+            clientes,
+          })), //Clientes hace referencia a el payload
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
 
 
-  constructor(
-    private actions$: Actions,
-    private clienteService: ClienteService,
-    private route: Router
-  ) {
-    this.httpHeaders = this.httpHeaders.append(
-      'Authorization',
-      'Bearer ' + this.token
-    );
-  }
+  
 }

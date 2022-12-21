@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Producto } from './Producto';
 import { ILogin } from '../models/ilogin';
 import { IResponse } from '../models/iresponse';
+import { ClienteReduce } from '../redux/models/item.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -60,7 +61,7 @@ export class ClienteService {
       map(response=>{
         let clientes=response as Cliente[];
         return clientes.map(cliente => {
-          cliente.nombre=cliente.nombre.toUpperCase();
+          cliente.nombre= cliente.nombre!=null ? cliente.nombre.toUpperCase() : '';
           // cliente.createAt = formatDate(cliente.createAt,'dd/MM/yyyy', 'en-US')
           // cliente.createAt = formatDate(cliente.createAt,'EEEE dd, MMMM yyyy', 'en-US');
           // cliente.createAt = formatDate(cliente.createAt,'fullDate','en-US');
@@ -123,6 +124,7 @@ export class ClienteService {
      
 
   update(cliente: Cliente, httpHeaders:HttpHeaders) : Observable<Cliente>{
+    console.log(cliente);
     return this.http.post(this.UrlEndpoint+"/save",cliente, {headers:httpHeaders}).pipe(
       map( ( response:any ) => response.cliente as Cliente),
       catchError(e =>{

@@ -1,7 +1,7 @@
 // import { ItemsState } from '../models/item.interface';
 import { createSelector } from '@ngrx/store'  //Para crear el selector
 import { AppState } from '../app.state'
-import { ClienteState, ItemsState } from '../models/item.interface';
+import { ClienteReduce, ClienteState, ItemsState } from '../models/item.interface';
 
 //Selector que tiene relacion con la propiedad clienteList del app.state.ts
 export const selectClientesFeature = (state:AppState)=> state.clienteList;  //Padre
@@ -27,5 +27,5 @@ export const selectLoading = createSelector (
 export const selectSaveCliente = createSelector (
     selectSaveClienteFeature,
     // selectProductosFeature
-    (state: ClienteState) => state.cliente
+    (state: ClienteReduce) => state.cliente
 )

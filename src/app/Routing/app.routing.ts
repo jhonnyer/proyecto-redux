@@ -41,7 +41,11 @@ const appRoutes: Routes=[
             role:'ROLE_USER'
         }
     },
-    { path: 'dashboard', loadChildren:() => import('../modulos/dashboard/dashboard.module').then (x=> x.DashboardModule)},
+    { path: 'dashboard', loadChildren:() => import('../modulos/dashboard/dashboard.module').then (x=> x.DashboardModule), 
+    canActivate:[LoginGuard, HasRoleGuardGuard], 
+    data: {
+        role:'ROLE_ADMIN'
+    }},
     {path: '**', component: HomeComponent}
 ];
 
